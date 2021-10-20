@@ -1,21 +1,83 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { TToDoTypes } from './types';
+import { Navbar } from './components/navbar';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, View, StatusBar, Alert } from 'react-native';
+import { Main } from './screens/main';
+import { ToDo } from './screens/to-do';
 
 export default function App() {
+
+  const [toDoId, setToDoId] = useState<string>('');
+  const [toDoList, setToDoList] = useState<Array<TToDoTypes>>([]);
+
+  const addToDo = useCallback((title: string) => {
+    setToDoList(toDoList => [...toDoList, { id: new Date().toString(), title }]);
+  }, []);
+
+  const removeToDo = useCallback((index: number) => {
+    Alert.alert(
+      'Remove task',
+      `Do you want remove task ${toDoList[index]}`,
+      [
+        { style: 'cancel', text: 'Cancel' },
+        {
+          style: 'destructive',
+          text: 'Remove',
+          onPress: remove
+        }
+      ]
+    );
+    function remove() {
+      setToDoList(list => [...list.slice(0, index), ...list.slice(index + 1)]);
+      if (toDoId) {
+        setToDoId('');
+      }
+    }
+  }, [toDoList, toDoId]);
+
+  let content: JSX.Element = (
+    <Main addToDo={addToDo} removeToDo={removeToDo} toDoList={toDoList} openToDo={setToDoId}/>
+  );
+
+  if (toDoId) {
+    const toDo = toDoList.find(toDo => toDo.id === toDoId);
+    function onRemove(): void {
+      if (!toDo) return;
+      const index = toDoList.indexOf(toDo);
+      if (index < 0) return;
+      removeToDo(index);
+    }
+    function save(toDo: TToDoTypes): void {
+      setToDoList(toDoList.map(currentToDo => {
+        if (toDo.id === currentToDo.id) {
+          return toDo;
+        }
+        return currentToDo;
+      }))
+    }
+    content = (
+      <ToDo
+        toDo={toDo}
+        goBack={setToDoId.bind(null, '')}
+        onRemove={onRemove}
+        save={save}
+      />
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.wrapper}>
+      <Navbar />
+      {content}
+      <StatusBar barStyle="light-content" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'flex-start',
+  }
 });
