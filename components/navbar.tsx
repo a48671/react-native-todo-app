@@ -1,11 +1,12 @@
+import { TextUI } from '../components/text.ui';
 import { EnumColors } from '../enums/colors';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 export const Navbar = (): JSX.Element => {
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.title}>To do App</Text>
+      <TextUI style={styles.title}>To do App</TextUI>
     </View>
   );
 };
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: 'roboto-bold'
   }
 })

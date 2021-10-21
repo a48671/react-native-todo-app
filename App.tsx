@@ -4,9 +4,19 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, StatusBar, Alert } from 'react-native';
 import { Main } from './screens/main';
 import { ToDo } from './screens/to-do';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
+async function loadFonts() {
+  await Font.loadAsync({
+    'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf')
+  });
+}
 
 export default function App() {
 
+  const [isReady, setIsReady] = useState(false);
   const [toDoId, setToDoId] = useState<string>('');
   const [toDoList, setToDoList] = useState<Array<TToDoTypes>>([]);
 
@@ -35,6 +45,16 @@ export default function App() {
     }
   }, [toDoList, toDoId]);
 
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onError={console.error}
+        onFinish={setIsReady.bind(null, true)}
+      />
+    )
+  }
+
   let content: JSX.Element = (
     <Main addToDo={addToDo} removeToDo={removeToDo} toDoList={toDoList} openToDo={setToDoId}/>
   );
@@ -48,7 +68,7 @@ export default function App() {
       removeToDo(index);
     }
     function save(toDo: TToDoTypes): void {
-      setToDoList(toDoList.map(currentToDo => {
+      setToDoList(toDoList => toDoList.map(currentToDo => {
         if (toDo.id === currentToDo.id) {
           return toDo;
         }

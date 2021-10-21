@@ -1,8 +1,9 @@
+import { TextUI } from '../components/text.ui';
 import { Edit } from '../components/edit';
 import { Card } from '../components/card';
 import { EnumColors } from '../enums/colors';
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { TToDoTypes } from '../types';
 
 type TPropTypes = {
@@ -20,7 +21,7 @@ export const ToDo = ({ goBack, toDo, onRemove, save }: TPropTypes): JSX.Element 
     <View style={styles.wrapper}>
       <View style={styles.content}>
         <Card customStyles={{ marginBottom: 20 }} buttonText="Edit" onPress={setEditIsOpen.bind(null, true)}>
-          <Text style={styles.title}>{toDo?.title ? toDo.title : 'Task not found :('}</Text>
+          <TextUI style={styles.title}>{toDo?.title ? toDo.title : 'Task not found :('}</TextUI>
         </Card>
       </View>
       <View style={styles.buttons}>

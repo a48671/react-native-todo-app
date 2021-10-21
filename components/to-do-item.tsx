@@ -1,6 +1,7 @@
+import { TextUI } from '../components/text.ui';
 import { EnumColors } from '../enums/colors';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { TToDoTypes } from '../types';
 
 type TPropTypes = {
@@ -13,7 +14,7 @@ export const ToDoItem = ({ toDo, remove, openToDo }: TPropTypes): JSX.Element =>
   return (
     <TouchableOpacity onLongPress={remove} onPress={openToDo.bind(null, toDo.id)}>
       <View style={styles.wrapper}>
-        <Text style={styles.title}>{toDo.title}</Text>
+        <TextUI style={styles.title}>{toDo.title}</TextUI>
       </View>
     </TouchableOpacity>
   );

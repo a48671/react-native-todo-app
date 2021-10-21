@@ -2,7 +2,7 @@ import { TToDoTypes } from '../types';
 import { AddToDo } from '../components/add-to-do';
 import { ToDoList } from '../components/to-do-list';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
 type TPropTypes = {
   addToDo: (title: string) => void;
@@ -12,10 +12,25 @@ type TPropTypes = {
 };
 
 export const Main = ({ addToDo, toDoList, removeToDo, openToDo }: TPropTypes): JSX.Element => {
+
+  let content = (
+    <ToDoList list={toDoList} removeToDo={removeToDo} openToDo={openToDo} />
+  );
+
+  if (!toDoList.length) {
+    content = (
+      <View style={styles.imageContainer}>
+        <View style={styles.imageBlock}>
+          <Image style={styles.image} source={require('../assets/img.png')} />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.wrapper}>
       <AddToDo addToDo={addToDo} />
-      <ToDoList list={toDoList} removeToDo={removeToDo} openToDo={openToDo} />
+      {content}
     </View>
   );
 };
@@ -23,6 +38,25 @@ export const Main = ({ addToDo, toDoList, removeToDo, openToDo }: TPropTypes): J
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    padding: 10,
+    width: '100%'
+  },
+  imageContainer: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  imageBlock: {
+    width: 150,
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 10
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain'
   }
 });
