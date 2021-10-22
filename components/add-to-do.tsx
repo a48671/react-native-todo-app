@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, View, Button, TextInput, StyleSheet } from 'react-native';
 import { EnumColors } from '../enums/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 type TPropTypes = {
   addToDo: (title: string) => void;
@@ -29,7 +30,7 @@ export const AddToDo = ({ addToDo }: TPropTypes): JSX.Element => {
         autoCorrect={false}
         autoCapitalize="none"
       />
-      <Button title="Add" onPress={addToDoHandler} />
+      <Ionicons.Button name="add-circle-outline">Add</Ionicons.Button>
     </View>
   );
 };
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: EnumColors.main,
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
+    marginRight: 10
   }
 });
