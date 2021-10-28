@@ -1,21 +1,26 @@
-import { TToDo } from '../contexts/todo/todo.types';
+import { ScreenContext } from '../contexts/screen/screen.context';
+import { TodoContext } from '../contexts/todo/todo.context';
 import { TextUI } from '../components/text.ui';
 import { Edit } from '../components/edit';
 import { Card } from '../components/card';
 import { EnumColors } from '../enums/colors';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 
-type TPropTypes = {
-  toDo?: TToDo;
-  goBack: VoidFunction;
-  onRemove: VoidFunction;
-  save: (toDo: TToDo) => void;
-}
+export const ToDo = (): JSX.Element => {
 
-export const ToDo = ({ goBack, toDo, onRemove, save }: TPropTypes): JSX.Element => {
+  const { saveToDo, removeToDo, toDoList } = useContext(TodoContext);
+  const { toDoId, setToDoId } = useContext(ScreenContext);
 
   const [editIsOpen, setEditIsOpen] = useState(false);
+
+  const toDo = toDoList.find(toDo => toDo.id === toDoId);
+  function onRemove(): void {
+    if (!toDo) return;
+    const index = toDoList.indexOf(toDo);
+    if (index < 0) return;
+    removeToDo(index);
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -25,10 +30,10 @@ export const ToDo = ({ goBack, toDo, onRemove, save }: TPropTypes): JSX.Element 
         </Card>
       </View>
       <View style={styles.buttons}>
-        <Button onPress={goBack} title="Back" color={EnumColors.grey} />
+        <Button onPress={setToDoId.bind(null, null)} title="Back" color={EnumColors.grey} />
         <Button onPress={onRemove} title="Remove" color={EnumColors.danger} />
       </View>
-      {toDo && <Edit isOpen={editIsOpen} setEditIsOpen={setEditIsOpen} toDo={toDo} save={save} />}
+      {toDo && <Edit isOpen={editIsOpen} setEditIsOpen={setEditIsOpen} toDo={toDo} save={saveToDo} />}
     </View>
   );
 };

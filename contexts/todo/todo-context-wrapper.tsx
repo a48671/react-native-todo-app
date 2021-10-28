@@ -1,10 +1,11 @@
+import { ScreenContext } from '../screen/screen.context';
 import { Alert } from 'react-native';
 import { TToDo } from './todo.types';
 import { TodoTypesEnum } from './todo-types.enum';
 import { todoInitialState } from './todo.initial-state';
 import { todoReducer } from './todo.reducer';
 import { TodoContext } from './todo.context';
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useContext, useReducer } from 'react';
 
 type TProps = {
   children: JSX.Element;
@@ -12,6 +13,8 @@ type TProps = {
 
 export function TodoContextWrapper({ children }: TProps): JSX.Element {
   const [state, dispatch] = useReducer(todoReducer, todoInitialState);
+
+  const { setToDoId } = useContext(ScreenContext);
 
   const addToDo = useCallback((title: string) => {
     dispatch({ type: TodoTypesEnum.ADD_TODO, payload: title })
@@ -32,8 +35,9 @@ export function TodoContextWrapper({ children }: TProps): JSX.Element {
     );
     function remove() {
       dispatch({ type: TodoTypesEnum.REMOVE_TODO, payload: index });
+      setToDoId(null);
     }
-  }, [dispatch]);
+  }, [dispatch, setToDoId]);
 
   const saveToDo = useCallback((toDo: TToDo) => {
     dispatch({ type: TodoTypesEnum.UPDATE_TODO, payload: toDo })

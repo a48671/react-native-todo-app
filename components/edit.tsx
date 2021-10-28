@@ -19,12 +19,17 @@ export const Edit = ({ isOpen, setEditIsOpen, toDo, save }: TPropTypes): JSX.Ele
     setEditIsOpen(false);
   }
 
+  function cancelHandler() {
+    setTitle(toDo.title);
+    setEditIsOpen(false);
+  }
+
   return (
     <Modal visible={isOpen} transparent={false} animated animationType="slide">
       <View style={styles.wrapper}>
         <TextInput value={title} style={styles.input} placeholder="Task text" onChangeText={setTitle} />
         <View style={styles.buttons}>
-          <Button title="Cancel" onPress={setEditIsOpen.bind(null, false)} color={EnumColors.danger} />
+          <Button title="Cancel" onPress={cancelHandler} color={EnumColors.danger} />
           <Button
             title="Save" onPress={onSaveHandler}
             color={EnumColors.main}

@@ -27,11 +27,11 @@ export default function App() {
   }
 
   return (
-    <TodoContextWrapper>
-      <ScreenContextWrapper>
+    <ScreenContextWrapper>
+      <TodoContextWrapper>
         <MainLayout />
-      </ScreenContextWrapper>
-    </TodoContextWrapper>
+      </TodoContextWrapper>
+    </ScreenContextWrapper>
   );
 }
 
