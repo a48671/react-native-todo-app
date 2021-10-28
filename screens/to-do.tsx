@@ -1,16 +1,16 @@
+import { TToDo } from '../contexts/todo/todo.types';
 import { TextUI } from '../components/text.ui';
 import { Edit } from '../components/edit';
 import { Card } from '../components/card';
 import { EnumColors } from '../enums/colors';
 import React, { useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import { TToDoTypes } from '../types';
 
 type TPropTypes = {
-  toDo?: TToDoTypes;
+  toDo?: TToDo;
   goBack: VoidFunction;
   onRemove: VoidFunction;
-  save: (toDo: TToDoTypes) => void;
+  save: (toDo: TToDo) => void;
 }
 
 export const ToDo = ({ goBack, toDo, onRemove, save }: TPropTypes): JSX.Element => {

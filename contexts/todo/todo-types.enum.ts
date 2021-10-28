@@ -1,0 +1,6 @@
+export enum TodoTypesEnum {
+  ADD_TODO = 'ADD_TODO',
+  REMOVE_TODO = 'REMOVE_TODO',
+  UPDATE_TODO = 'UPDATE_TODO',
+  DEFAULT = 'DEFAULT'
+}

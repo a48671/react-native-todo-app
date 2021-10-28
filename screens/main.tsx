@@ -1,20 +1,17 @@
-import { TToDoTypes } from '../types';
+import { ScreenContext } from '../contexts/screen/screen.context';
+import { TodoContext } from '../contexts/todo/todo.context';
 import { AddToDo } from '../components/add-to-do';
 import { ToDoList } from '../components/to-do-list';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 
-type TPropTypes = {
-  addToDo: (title: string) => void;
-  toDoList: Array<TToDoTypes>;
-  removeToDo: (index: number) => void;
-  openToDo: (toDoId: string) => void;
-};
+export const Main = (): JSX.Element => {
 
-export const Main = ({ addToDo, toDoList, removeToDo, openToDo }: TPropTypes): JSX.Element => {
+  const { removeToDo, toDoList, addToDo } = useContext(TodoContext);
+  const { setToDoId } = useContext(ScreenContext);
 
   let content = (
-    <ToDoList list={toDoList} removeToDo={removeToDo} openToDo={openToDo} />
+    <ToDoList list={toDoList} removeToDo={removeToDo} openToDo={setToDoId} />
   );
 
   if (!toDoList.length) {

@@ -2,15 +2,16 @@ import { TextUI } from '../components/text.ui';
 import { EnumColors } from '../enums/colors';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { TToDoTypes } from '../types';
+import { TToDo } from '../contexts/todo/todo.types';
 
 type TPropTypes = {
-  toDo: TToDoTypes;
+  toDo: TToDo;
   remove: VoidFunction;
   openToDo: (toDoId: string) => void;
 }
 
 export const ToDoItem = ({ toDo, remove, openToDo }: TPropTypes): JSX.Element => {
+
   return (
     <TouchableOpacity onLongPress={remove} onPress={openToDo.bind(null, toDo.id)}>
       <View style={styles.wrapper}>

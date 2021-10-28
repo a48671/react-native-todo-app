@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, View, Button, TextInput, StyleSheet } from 'react-native';
+import { Alert, View, Keyboard, TextInput, StyleSheet } from 'react-native';
 import { EnumColors } from '../enums/colors';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -18,6 +18,7 @@ export const AddToDo = ({ addToDo }: TPropTypes): JSX.Element => {
     }
     addToDo(title);
     setTitle('');
+    Keyboard.dismiss();
   }
 
   return (
@@ -30,7 +31,7 @@ export const AddToDo = ({ addToDo }: TPropTypes): JSX.Element => {
         autoCorrect={false}
         autoCapitalize="none"
       />
-      <Ionicons.Button name="add-circle-outline">Add</Ionicons.Button>
+      <Ionicons.Button onPress={addToDoHandler} name="add-circle-outline">Add</Ionicons.Button>
     </View>
   );
 };

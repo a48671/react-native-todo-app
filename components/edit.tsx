@@ -1,13 +1,13 @@
+import { TToDo } from '../contexts/todo/todo.types';
 import React, { useState } from 'react';
 import { Modal, View, Button, StyleSheet, TextInput } from 'react-native';
-import { TToDoTypes } from '../types';
 import { EnumColors } from '../enums/colors';
 
 type TPropTypes = {
   isOpen: boolean;
   setEditIsOpen: (editIsOpen: boolean) => void;
-  toDo: TToDoTypes;
-  save: (toDo: TToDoTypes) => void;
+  toDo: TToDo;
+  save: (toDo: TToDo) => void;
 };
 
 export const Edit = ({ isOpen, setEditIsOpen, toDo, save }: TPropTypes): JSX.Element => {

@@ -1,17 +1,17 @@
-import { TToDoTypes } from '../types';
+import { TToDo } from '../contexts/todo/todo.types';
 import { ToDoItem } from './to-do-item';
 import React from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 
 type TPropTypes = {
-  list: Array<TToDoTypes>;
+  list: Array<TToDo>;
   removeToDo: (index: number) => void;
   openToDo: (toDoId: string) => void;
 }
 
 export const ToDoList = ({ list, removeToDo, openToDo }: TPropTypes): JSX.Element => {
 
-  function renderItem({ item, index }: ListRenderItemInfo<TToDoTypes>) {
+  function renderItem({ item, index }: ListRenderItemInfo<TToDo>) {
     return (
       <ToDoItem
         remove={removeToDo.bind(null, index)}
@@ -22,7 +22,7 @@ export const ToDoList = ({ list, removeToDo, openToDo }: TPropTypes): JSX.Elemen
   }
 
   return (
-    <FlatList<TToDoTypes>
+    <FlatList<TToDo>
       data={list}
       renderItem={renderItem}
       keyExtractor={item => item.id}
