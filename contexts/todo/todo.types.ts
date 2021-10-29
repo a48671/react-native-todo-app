@@ -7,6 +7,8 @@ export type TToDo = {
 
 export type TTodoState = {
   toDoList: Array<TToDo>;
+  loading: boolean;
+  error: string | null;
 };
 
 export type TAction = {

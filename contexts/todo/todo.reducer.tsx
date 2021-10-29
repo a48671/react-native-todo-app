@@ -30,7 +30,12 @@ const handlers: THandlers = {
       })
     });
   },
-  [TodoTypesEnum.DEFAULT]: (state, action) => state
+  [TodoTypesEnum.SHOW_LOADER]: (state) => ({ ...state, loading: true }),
+  [TodoTypesEnum.HIDE_LOADER]: (state) => ({ ...state, loading: false }),
+  [TodoTypesEnum.SHOW_ERROR]: (state, { payload }) => ({ ...state, error: payload }),
+  [TodoTypesEnum.CLEAR_ERROR]: (state) => ({ ...state, error: null }),
+  [TodoTypesEnum.FETCH_TODOS]: (state, { payload }) => ({ ...state, toDoList: payload }),
+  [TodoTypesEnum.DEFAULT]: (state) => state
 };
 
 export function todoReducer(state: TTodoState, action: TAction): TTodoState {

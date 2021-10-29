@@ -43,6 +43,11 @@ export function TodoContextWrapper({ children }: TProps): JSX.Element {
     dispatch({ type: TodoTypesEnum.UPDATE_TODO, payload: toDo })
   }, [dispatch]);
 
+  const showLoader = () => dispatch({ type: TodoTypesEnum.SHOW_LOADER, payload: null });
+  const hideLoader = () => dispatch({ type: TodoTypesEnum.HIDE_LOADER, payload: null });
+  const showError = (error: string) => dispatch({ type: TodoTypesEnum.SHOW_ERROR, payload: error });
+  const clearError = () => dispatch({ type: TodoTypesEnum.CLEAR_ERROR, payload: null });
+
   return (
     <TodoContext.Provider value={{
       toDoList: state.toDoList,
