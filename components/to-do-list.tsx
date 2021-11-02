@@ -5,7 +5,7 @@ import { FlatList, ListRenderItemInfo } from 'react-native';
 
 type TPropTypes = {
   list: Array<TToDo>;
-  removeToDo: (index: number) => void;
+  removeToDo: (toDo: TToDo) => void;
   openToDo: (toDoId: string) => void;
 }
 
@@ -14,7 +14,7 @@ export const ToDoList = ({ list, removeToDo, openToDo }: TPropTypes): JSX.Elemen
   function renderItem({ item, index }: ListRenderItemInfo<TToDo>) {
     return (
       <ToDoItem
-        remove={removeToDo.bind(null, index)}
+        remove={removeToDo.bind(null, item)}
         toDo={item}
         openToDo={openToDo}
       />

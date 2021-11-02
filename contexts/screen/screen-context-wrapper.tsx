@@ -6,7 +6,7 @@ type TProps = {
 }
 
 export const ScreenContextWrapper = ({ children }: TProps): JSX.Element => {
-  const [toDoId, setToDoId] = useState(null);
+  const [toDoId, setToDoId] = useState<string | null>(null);
 
   return (
     <ScreenContext.Provider value={{ setToDoId, toDoId }}>

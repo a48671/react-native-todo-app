@@ -1,3 +1,4 @@
+import { Http } from '../../services/http';
 import { ScreenContext } from '../screen/screen.context';
 import { Alert } from 'react-native';
 import { TToDo } from './todo.types';
@@ -16,14 +17,19 @@ export function TodoContextWrapper({ children }: TProps): JSX.Element {
 
   const { setToDoId } = useContext(ScreenContext);
 
-  const addToDo = useCallback((title: string) => {
-    dispatch({ type: TodoTypesEnum.ADD_TODO, payload: title })
+  const addToDo = useCallback(async (title: string) => {
+    try {
+      const data: { name: string } = await Http.create(title);
+      dispatch({ type: TodoTypesEnum.ADD_TODO, payload: { title, id: data.name } })
+    } catch {
+      showAlert();
+    }
   }, [dispatch]);
 
-  const removeToDo = useCallback((index: number) => {
+  const removeToDo = useCallback((toDo: TToDo) => {
     Alert.alert(
       'Remove task',
-      `Do you want remove task ${state.toDoList[index]}`,
+      `Do you want remove task ${toDo.title}`,
       [
         { style: 'cancel', text: 'Cancel' },
         {
@@ -33,29 +39,76 @@ export function TodoContextWrapper({ children }: TProps): JSX.Element {
         }
       ]
     );
-    function remove() {
-      dispatch({ type: TodoTypesEnum.REMOVE_TODO, payload: index });
-      setToDoId(null);
+    async function remove() {
+      try {
+        await Http.remove(toDo);
+        dispatch({ type: TodoTypesEnum.REMOVE_TODO, payload: toDo });
+        setToDoId(null);
+      } catch {
+        showAlert();
+      }
     }
   }, [dispatch, setToDoId]);
 
-  const saveToDo = useCallback((toDo: TToDo) => {
-    dispatch({ type: TodoTypesEnum.UPDATE_TODO, payload: toDo })
+  const saveToDo = useCallback(async (toDo: TToDo) => {
+    try {
+      await Http.update(toDo);
+      dispatch({ type: TodoTypesEnum.UPDATE_TODO, payload: toDo })
+    } catch {
+      showAlert();
+    }
   }, [dispatch]);
 
   const showLoader = () => dispatch({ type: TodoTypesEnum.SHOW_LOADER, payload: null });
   const hideLoader = () => dispatch({ type: TodoTypesEnum.HIDE_LOADER, payload: null });
-  const showError = (error: string) => dispatch({ type: TodoTypesEnum.SHOW_ERROR, payload: error });
-  const clearError = () => dispatch({ type: TodoTypesEnum.CLEAR_ERROR, payload: null });
+
+  async function fetchToDos() {
+    showLoader();
+    try {
+      const data: { [key: string]: { title: string } } = await Http.get();
+      const todos = Object.entries(data).map(([id, data]) => ({ id, title: data.title }));
+      dispatch({ type: TodoTypesEnum.FETCH_TODOS, payload: todos });
+    } catch (error) {
+      Alert.alert(
+        'Error message',
+        'Something has went wrong...',
+        [
+          {
+            style: 'default',
+            text: 'Repeat',
+            onPress: fetchToDos
+          }
+        ]
+      );
+    } finally {
+      hideLoader();
+    }
+  }
 
   return (
     <TodoContext.Provider value={{
       toDoList: state.toDoList,
       addToDo,
       removeToDo,
-      saveToDo
+      saveToDo,
+      fetchToDos,
+      hideLoader,
+      loading: state.loading,
     }}>
       {children}
     </TodoContext.Provider>
   )
+}
+
+function showAlert(): void {
+  Alert.alert(
+    'Error message',
+    'Something has went wrong...',
+    [
+      {
+        style: 'cancel',
+        text: 'Ok'
+      }
+    ]
+  );
 }

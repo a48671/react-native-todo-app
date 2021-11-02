@@ -14,8 +14,8 @@ export const Edit = ({ isOpen, setEditIsOpen, toDo, save }: TPropTypes): JSX.Ele
 
   const [title, setTitle] = useState<string>(toDo.title);
 
-  function onSaveHandler(): void {
-    save({ ...toDo, title });
+  async function onSaveHandler() {
+    await save({ ...toDo, title });
     setEditIsOpen(false);
   }
 

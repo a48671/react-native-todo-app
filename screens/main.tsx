@@ -2,17 +2,30 @@ import { ScreenContext } from '../contexts/screen/screen.context';
 import { TodoContext } from '../contexts/todo/todo.context';
 import { AddToDo } from '../components/add-to-do';
 import { ToDoList } from '../components/to-do-list';
-import React, { useContext } from 'react';
+import { Loading } from '../components/loading';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 
 export const Main = (): JSX.Element => {
 
-  const { removeToDo, toDoList, addToDo } = useContext(TodoContext);
+  const { removeToDo, toDoList, addToDo, fetchToDos, loading } = useContext(TodoContext);
   const { setToDoId } = useContext(ScreenContext);
+
+  const getToDos = useCallback(() => {
+    fetchToDos();
+  }, [fetchToDos]);
+
+  useEffect(() => {
+    getToDos();
+  }, []);
 
   let content = (
     <ToDoList list={toDoList} removeToDo={removeToDo} openToDo={setToDoId} />
   );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!toDoList.length) {
     content = (

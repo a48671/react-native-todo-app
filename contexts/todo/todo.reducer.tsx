@@ -2,23 +2,23 @@ import { TodoTypesEnum } from './todo-types.enum';
 import { TAction, TTodoState } from './todo.types';
 
 type THandlers = {
-  [key: TodoTypesEnum]: (state: TTodoState, action: TAction) => TTodoState
+  [key in keyof typeof TodoTypesEnum]: (state: TTodoState, action: TAction) => TTodoState
 };
 
 const handlers: THandlers = {
-  [TodoTypesEnum.ADD_TODO]: (state, { payload }) => ({
+  [TodoTypesEnum.ADD_TODO]: (state: TTodoState, { payload }: TAction) => ({
     ...state,
-    toDoList: [...state.toDoList, { id: new Date().toString(), title: payload}]
+    toDoList: [...state.toDoList, { title: payload.title, id: payload.id }]
   }),
-  [TodoTypesEnum.REMOVE_TODO]: (state, { payload }) => {
+  [TodoTypesEnum.REMOVE_TODO]: (state: TTodoState, { payload }: TAction) => {
     const toDoList = state.toDoList;
-    const index = payload;
+    const id = payload.id;
     return ({
       ...state,
-      toDoList: [...toDoList.slice(0, index), ...toDoList.slice(index + 1)]
+      toDoList: toDoList.filter(toDo => toDo.id !== id)
     });
   },
-  [TodoTypesEnum.UPDATE_TODO]: (state, { payload }) => {
+  [TodoTypesEnum.UPDATE_TODO]: (state: TTodoState, { payload }: TAction) => {
     const toDo = payload;
     return ({
       ...state,
@@ -30,12 +30,12 @@ const handlers: THandlers = {
       })
     });
   },
-  [TodoTypesEnum.SHOW_LOADER]: (state) => ({ ...state, loading: true }),
-  [TodoTypesEnum.HIDE_LOADER]: (state) => ({ ...state, loading: false }),
-  [TodoTypesEnum.SHOW_ERROR]: (state, { payload }) => ({ ...state, error: payload }),
-  [TodoTypesEnum.CLEAR_ERROR]: (state) => ({ ...state, error: null }),
-  [TodoTypesEnum.FETCH_TODOS]: (state, { payload }) => ({ ...state, toDoList: payload }),
-  [TodoTypesEnum.DEFAULT]: (state) => state
+  [TodoTypesEnum.SHOW_LOADER]: (state: TTodoState) => ({ ...state, loading: true }),
+  [TodoTypesEnum.HIDE_LOADER]: (state: TTodoState) => ({ ...state, loading: false }),
+  [TodoTypesEnum.SHOW_ERROR]: (state: TTodoState, { payload }: TAction) => ({ ...state, error: payload }),
+  [TodoTypesEnum.CLEAR_ERROR]: (state: TTodoState) => ({ ...state, error: null }),
+  [TodoTypesEnum.FETCH_TODOS]: (state: TTodoState, { payload }: TAction) => ({ ...state, toDoList: payload }),
+  [TodoTypesEnum.DEFAULT]: (state: TTodoState) => state
 };
 
 export function todoReducer(state: TTodoState, action: TAction): TTodoState {

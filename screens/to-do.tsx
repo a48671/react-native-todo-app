@@ -19,7 +19,7 @@ export const ToDo = (): JSX.Element => {
     if (!toDo) return;
     const index = toDoList.indexOf(toDo);
     if (index < 0) return;
-    removeToDo(index);
+    removeToDo(toDo);
   }
 
   return (
